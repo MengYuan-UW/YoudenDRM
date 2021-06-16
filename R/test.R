@@ -82,6 +82,7 @@ KStest = function(x,y,qt,r = NULL,totalSize,method = "optimal"){
 #' @references
 #'
 #' \insertRef{qin1997goodness}{YoudenDRM}
+#'
 #' \insertRef{yuan2021semiparametric}{YoudenDRM}
 #' @export
 #'

@@ -49,7 +49,7 @@ dual = function(coef,x,y,qt){
 #' @importFrom Rdpack reprompt
 #' @references
 #'
-#' \insertRef{cai2018empirical}{YoudenDRM}
+#' \insertRef{yuan2021semiparametric}{YoudenDRM}
 #'
 #' @export
 DRM = function(x,y,qt,r = NULL,totalSize,method = "optimal"){

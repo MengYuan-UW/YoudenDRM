@@ -53,5 +53,6 @@ goodnessFit(x,y,qt = "t",B = 1000)
 }
 \references{
 \insertRef{qin1997goodness}{YoudenDRM}
+
 \insertRef{yuan2021semiparametric}{YoudenDRM}
 }

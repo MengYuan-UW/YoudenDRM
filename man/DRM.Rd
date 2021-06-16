@@ -46,5 +46,5 @@ we can use function \code{glm} or \code{multinom} to solve for parameters \eqn{\
 The method \code{optimal} estimates the parameters \eqn{\alpha} and \eqn{\boldsymbol{\beta}} by \code{glm} or \code{multinom}, whichever gives the larger likelihood \eqn{\ell_{n}(\alpha,\boldsymbol{\beta})}.
 }
 \references{
-\insertRef{cai2018empirical}{YoudenDRM}
+\insertRef{yuan2021semiparametric}{YoudenDRM}
 }
