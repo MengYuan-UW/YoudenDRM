@@ -36,7 +36,7 @@ y = DMD$CK[DMD$Status == 1]
 set.seed(123456)
 goodnessFit(x,y,qt = "t",B = 1000)
 # obtain the estimate of the Youden index and optimal cutoff point as well as their confidence intervals
-Youden(x,y,qt = "t")
+Youden(x,y,qt = "t",CItype ="logit-DRM")
 ```
 - Example 2: data with a lower limit of detection
 ```r
@@ -52,7 +52,7 @@ r = qlnorm(0.15,meanlog = 2.5, sdlog = sqrt(0.09))
 x = x[x>=r]
 y = y[y>=r]
 # obtain the estimate of the Youden index and optimal cutoff point as well as their confidence intervals
-Youden(x,y,qt,r,totalSize = c(50,50))
+Youden(x,y,qt,r,totalSize = c(50,50),CItype ="logit-DRM")
 ```
 
 ## References
