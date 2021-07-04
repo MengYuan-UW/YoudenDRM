@@ -1,48 +1,3 @@
-#' @title Point estimation of the Youden index and optimal cutoff point
-#' @description Estimate the Youden index and its corrreponding cutoff point and standard deviation of estimators under DRM based on the provided data.
-#'
-#' @param x observed sample from \eqn{F_0}.
-#' @param y observed sample from \eqn{F_1}.
-#' @param qt pre-sepecified basis functions of t in the exponential term. For example, \code{qt = c("t","log(t)")}.
-#' @param r  the value of the LLOD. The default case is where no LLOD exists.
-#' @param totalSize the total sample sizes \eqn{(n_0,n_1)}. When there is no LLOD (\code{r = NULL}), this argument is optional. See \code{help(DRM)} `Details'.
-#' @param method the method used to fit the DRM. The options include \code{"glm"}, \code{"multinom"} and \code{"optimal"}.
-#' The default setting is \code{"optimal"}. See \code{help(DRM)} for details.
-#'
-#' @import stats
-#' @import nnet
-#' @import rootSolve
-#'
-#' @return The function returns a list containing the following components:
-#' \itemize{
-#' \item J:  estimate of the Youden index,
-#' \item sdJ: standard devatation of the estimator of the Youden index,
-#' \item c: sdcestimate of the optimal cutoff point,
-#' \item sdc: standard devatation of the estimator of the optimal cutoff point.
-#'}
-#' @examples
-#' #DMD is the dataset of data application in \insertCite{yuan2021semiparametric;textual}{YoudenDRM}.
-#' x = DMD$CK[DMD$Status == 0]
-#' y = DMD$CK[DMD$Status == 1]
-#' DRMest(x,y,qt = "t")
-#' @examples
-#' #Date generation
-#' set.seed(123456)
-#' x = rlnorm(50, meanlog = 2.5, sdlog = sqrt(0.09))
-#' y = rlnorm(50, meanlog = 2.87,sdlog = sqrt(0.25))
-#' #Create the LLOD
-#' r = qlnorm(0.15,meanlog = 2.5, sdlog = sqrt(0.09))
-#' #Observed samples
-#' x = x[x>=r]
-#' y = y[y>=r]
-#' # The basis function
-#' qt = c("log(t)","log(t)^2")
-#' DRMest(x,y,qt,r,totalSize = c(50,50))
-#' @references
-#'
-#' \insertRef{yuan2021semiparametric}{YoudenDRM}
-#' @export
-
 DRMest = function(x,y,qt,r = NULL,totalSize, method = "optimal"){
   model = DRM(x,y,qt,r,totalSize,method)
   coef = model$coef
@@ -135,32 +90,63 @@ DRMest = function(x,y,qt,r = NULL,totalSize, method = "optimal"){
 
 ##################################################
 
-#' @title Confidence intervals for the Youden index and optimal cutoff point
-#' @description Construct CIs for the Youden index and its corrreponding cutoff point under DRMs based on the provided data.
+#' @title Inference on the Youden index and optimal cutoff point
+#' @description  Estimate the Youden index and its corrreponding cutoff point under the density ratio model (DRM) as well as construct confidence intervals based on the provided data.
 #'
 #' @param x observed sample from \eqn{F_0}.
 #' @param y observed sample from \eqn{F_1}.
 #' @param qt pre-sepecified basis functions of t in the exponential term. For example, \code{qt = c("t","log(t)")}.
-#' @param r  the value of the LLOD. The default case is where no LLOD exists.
+#' @param r  the value of the lower limit of detetion (LLOD). The default case is where no LLOD exists.
 #' @param totalSize the total sample sizes \eqn{(n_0,n_1)}. When there is no LLOD (\code{r = NULL}), this argument is optional. See \code{help(DRM)} `Details'.
 #' @param method the method used to fit the DRM. The options include \code{"glm"}, \code{"multinom"} and \code{"optimal"}.
 #' The default setting is \code{"optimal"}. See \code{help(DRM)} for details.
-#' @param logit whether the logit transformation is applied when constructing confidence interval for the Youden index.
+#' @param CItype the method to be used for confidence interval construction. See `Details'.
 #' @param level confidence level of the confidence interval. The default value is 0.95.
+#'
+#'@details Let \eqn{F_0} and \eqn{F_1} denote the cumulative distribution functions of the healthy population and the diseased population, respectively.
+#' The Youden index is defined as
+#' \deqn{J = \max_x{F_0(x) - F_1(x)} = F_0(c) - F_1(c),}
+#' where \eqn{c} is the corresponding cutoff point.
+#'
+#' Under the DRM, the estimator \eqn{\hat c} of cutoff point is the solution to the equation
+#' \deqn{\hat\alpha + \hat{\boldsymbol{\beta}}^\top \boldsymbol{q}(x) = 0,}
+#' where \eqn{\hat\alpha} and \eqn{\hat{\boldsymbol{\beta}}} are the estimators of the paramters of DRM.
+#' If multiple solution exist in the range of the observed samples, we choose the one that attains the maximum of \eqn{\hat F_0(\hat c) - \hat F_1(\hat c)} with
+#' \eqn{\hat F_0} and \eqn{\hat F_1} being  the estimator of \eqn{F_0} under the DRM.
+#' The explicit form of \eqn{\hat F_0} can be found in \insertCite{yuan2021semiparametric;textual}{YoudenDRM}.
+#' If no solution exists  in the range of the observed samples, we find the \eqn{\hat c} by the definition.
+#' With \eqn{\hat c}, the estimator of Youden index is \eqn{\hat J = \hat F_0(\hat c) - \hat F_1(\hat c)}.
+#'
+#'@details The argument \code{CItype} refers to difference confidence intervals of the Younde index and cutoff point
+#'under the DRMs in \insertCite{yuan2021semiparametric;textual}{YoudenDRM}.
+#'\itemize{
+#'\item  \code{"None"}: no confidence intervals for the Younde index and cutoff point is constructed;
+#'\item  \code{"NA-DRM"}: the Wald-type confidence intervals for the Younde index and cutoff point based on the normal approximation;
+#'\item  \code{"logit-DRM"}: the Wald-type confidence interval for the Youden index using logit transformation.
+#'The Wald-type confidence interval for the cutoff point is contructed based on the normal approximation.
+#'}
+#'
+#' @return The function returns a list containing the following components:
+#' \itemize{
+#' \item  Youden: the estimate, asymptotic standard deviation (ASD), and the confidence intervals (lower bound and uppper bound) of the Youden index.
+#' When \code{CItype = "None"}, it only returns the estimate and ASD.
+#' \item  cutoff: the estimate, ASD, and the confidence intervals (lower bound and uppper bound) of the optimal cutoff point.
+#' When \code{CItype = "None"}, it only returns the estimate and ASD.
+#' }
+#'
 #' @import stats
 #' @import nnet
 #' @import rootSolve
-#' @return The function returns a list containing the following components:
-#' \itemize{
-#' \item  CI_J: confidence interval of the Youden index.
-#' \item  CI_c :confidence interval of the optimal cutoff point.
-#' }
+#'
+#'
 #' @examples
-#' #DMD is the dataset of data application in \insertCite{yuan2021semiparametric;textual}{YoudenDRM}.
+#' #Example 1 (without LLOD)
+#' #DMD is the dataset of data application in the paper.
 #' x = DMD$CK[DMD$Status == 0]
 #' y = DMD$CK[DMD$Status == 1]
-#' DRMci(x,y,qt = "t")
+#' Youden(x,y,qt = "t",CItype ="logit-DRM")
 #' @examples
+#' #Example 2 (with a LLOD)
 #' #Date generation
 #' set.seed(123456)
 #' x = rlnorm(50, meanlog = 2.5, sdlog = sqrt(0.09))
@@ -172,20 +158,38 @@ DRMest = function(x,y,qt,r = NULL,totalSize, method = "optimal"){
 #' y = y[y>=r]
 #' # The basis function
 #' qt = c("log(t)","log(t)^2")
-#' DRMci(x,y,qt,r,totalSize = c(50,50))
+#' Youden(x,y,qt,r,totalSize = c(50,50),CItype ="logit-DRM")
 #' @references
 #'
 #' \insertRef{yuan2021semiparametric}{YoudenDRM}
+#'
 #' @export
-DRMci = function(x,y,qt,r = NULL, totalSize,method = "optimal", logit = T, level = 0.95){
+Youden = function(x,y,qt,r = NULL, totalSize,method = "optimal", CItype, level = 0.95){
   model = DRMest(x,y,qt,r,totalSize,method)
   quant = qnorm((1+level)/2)
-  CI_c = model$c +c(-1,1)*quant*model$sdc
-  if(logit == T){
+  if(missing(CItype)){CItype == "None"}
+  if(CItype == "None"){
+    J = c(model$J,model$sdJ)
+    c = c(model$c,model$sdc)
+    names(J) = c("estimate","ASD")
+    names(c) = c("estimate","ASD")
+  }
+  if(CItype == "NA-DRM"){
+    CI_c = model$c +c(-1,1)*quant*model$sdc
+    CI_J= model$J +c(-1,1)*quant*model$sdJ
+    J = c(model$J,model$sdJ,CI_J)
+    c = c(model$c,model$sdc,CI_c)
+    names(J) = c("estimate","ASD","lower bound","upper bound")
+    names(c) = c("estimate","ASD","lower bound","upper bound")
+  }
+  if(CItype == "logit-DRM"){
+    CI_c = model$c +c(-1,1)*quant*model$sdc
     CI =log(model$J) - log(1 - model$J) + c(-1,1)*quant*model$sdJ/(model$J*(1-model$J))
     CI_J =exp(CI)/(1 + exp(CI))
-  }else{
-    CI_J= model$J +c(0,-1,1)*quant*model$sdJ
+    J = c(model$J,model$sdJ,CI_J)
+    c = c(model$c,model$sdc,CI_c)
+    names(J) = c("estimate","ASD","lower bound","upper bound")
+    names(c) = c("estimate","ASD","lower bound","upper bound")
   }
-  return(list(CI_J = CI_J,CI_c = CI_c ))
+  return(list(Youden = J, cutoff = c))
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/DRM.R
 \name{DRM}
 \alias{DRM}
-\title{Density Ratio Model}
+\title{Density Ratio Model (DRM)}
 \usage{
 DRM(x, y, qt, r = NULL, totalSize, method = "optimal")
 }
@@ -31,10 +31,17 @@ The function returns a list containing the following components:
 }
 }
 \description{
-Fit a semiparametric two-sample DRM based on data with or without the LLOD.
+Fit a semiparametric two-sample DRM based on data with or without the lower limit of detetion (LLOD).
 }
 \details{
 Denote \eqn{\{X_{01},\ldots,X_{0n_0}\}} and \eqn{\{X_{11},\ldots,X_{1n_1}\}} as two independent random samples coming from the healthy and diseased populations, respectively.
+Let \eqn{F_0} and \eqn{F_1} denote the cumulative distribution functions of the healthy population and the diseased population.
+\insertCite{yuan2021semiparametric}{YoudenDRM} porposed to link \eqn{F_0} and \eqn{F_1} by a DRM:
+\deqn{dF_1(x) = \exp\{\alpha + \boldsymbol{\beta}^\top \boldsymbol{q}(x)\}dF_0(x),}
+where \eqn{dF_i} denote the density of \eqn{F_i}; \eqn{\alpha} and \eqn{\boldsymbol{\beta}} are unknown parameters for the DRM;
+\eqn{\boldsymbol{q}(x)} is a pre-specified, non-trivial function of dimension \eqn{d};
+ the baseline distribution \eqn{F_0} is unspecified.
+
 Suppose the biomarker has a LLOD, denoted as \eqn{r}. Let \eqn{m_0} and \eqn{m_1} be the numbers of observations above the LLOD \eqn{r} in the healthy and diseased groups, respectively.
 Without loss of generality, we assume the first \eqn{m_i} observations in sample \eqn{i}, \eqn{X_{i1},\ldots,X_{im_i}} are above the LLOD.
 According to \insertCite{yuan2021semiparametric;textual}{YoudenDRM},

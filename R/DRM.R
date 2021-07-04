@@ -1,20 +1,5 @@
-
-dual = function(coef,x,y,qt){
-  t = c(x,y)
-  rho = length(y)/length(x)
-  qt_data = lapply(1:length(qt),function(i){eval(parse(text = qt[i]))})
-  qt_matrix = cbind(1,matrix(unlist(qt_data),nrow = length(t),byrow = F))
-  qy = gsub("t","y",qt)
-  qy_data = lapply(1:length(qy),function(i){eval(parse(text = qy[i]))})
-  qy_matrix = cbind(1, matrix(unlist(qy_data),nrow = length(y),byrow = F))
-
-  pi = 1/(1+rho*exp(qt_matrix%*%coef))
-  loglik = sum(log(pi)) + sum(qy_matrix%*%coef)
-  loglik
-}
-
-#' @title Density Ratio Model
-#' @description Fit a semiparametric two-sample DRM based on data with or without the LLOD.
+#' @title Density Ratio Model (DRM)
+#' @description Fit a semiparametric two-sample DRM based on data with or without the lower limit of detetion (LLOD).
 #'
 #' @param x observed sample from \eqn{F_0}.
 #' @param y observed sample from \eqn{F_1}.
@@ -25,6 +10,13 @@ dual = function(coef,x,y,qt){
 #' The default setting is \code{"optimal"}. See `Details'.
 #'
 #' @details Denote \eqn{\{X_{01},\ldots,X_{0n_0}\}} and \eqn{\{X_{11},\ldots,X_{1n_1}\}} as two independent random samples coming from the healthy and diseased populations, respectively.
+#' Let \eqn{F_0} and \eqn{F_1} denote the cumulative distribution functions of the healthy population and the diseased population.
+#' \insertCite{yuan2021semiparametric}{YoudenDRM} porposed to link \eqn{F_0} and \eqn{F_1} by a DRM:
+#' \deqn{dF_1(x) = \exp\{\alpha + \boldsymbol{\beta}^\top \boldsymbol{q}(x)\}dF_0(x),}
+#' where \eqn{dF_i} denote the density of \eqn{F_i}; \eqn{\alpha} and \eqn{\boldsymbol{\beta}} are unknown parameters for the DRM;
+#' \eqn{\boldsymbol{q}(x)} is a pre-specified, non-trivial function of dimension \eqn{d};
+#'  the baseline distribution \eqn{F_0} is unspecified.
+#'
 #' Suppose the biomarker has a LLOD, denoted as \eqn{r}. Let \eqn{m_0} and \eqn{m_1} be the numbers of observations above the LLOD \eqn{r} in the healthy and diseased groups, respectively.
 #' Without loss of generality, we assume the first \eqn{m_i} observations in sample \eqn{i}, \eqn{X_{i1},\ldots,X_{im_i}} are above the LLOD.
 #' According to \insertCite{yuan2021semiparametric;textual}{YoudenDRM},
@@ -72,7 +64,6 @@ DRM = function(x,y,qt,r = NULL,totalSize,method = "optimal"){
   m0 = length(x_obs)
   m1 = length(y_obs)
 
-  rho=c(m0,m1)/(m0+m1)
   zeta0 = m0/n0
   zeta1 = m1/n1
 
@@ -81,6 +72,16 @@ DRM = function(x,y,qt,r = NULL,totalSize,method = "optimal"){
   td = sort(t)
   qt_data = lapply(1:length(qt),function(i){eval(parse(text = qt[i]))})
   qt_matrix = cbind(1,matrix(unlist(qt_data),nrow = length(t),byrow = F))
+  qy = gsub("t","y",qt)
+  qy_data = lapply(1:length(qy),function(i){eval(parse(text = qy[i]))})
+  qy_matrix = cbind(1, matrix(unlist(qy_data),nrow = length(y),byrow = F))
+
+  dual = function(coef){
+    pi = 1/(1+n1/n0*exp(qt_matrix%*%coef))
+    loglik = sum(log(pi)) + sum(qy_matrix%*%coef)
+    loglik
+  }
+
   glm_frame =data.frame(cbind(group,qt_matrix[,-1]))
   formula = as.formula(paste("group~",
                              paste(names(glm_frame)[-1],collapse = "+"),collapse = ""))
@@ -96,7 +97,7 @@ DRM = function(x,y,qt,r = NULL,totalSize,method = "optimal"){
     }else{
       outcoef1=coef(out1)
       outcoef1[1]=outcoef1[1]-log(n1/n0)
-      dual1 = dual(outcoef1,x_obs,y_obs,qt)
+      dual1 = dual(outcoef1)
     }
     if (is.null(out2)){
       dual2 = -1e5
@@ -104,7 +105,7 @@ DRM = function(x,y,qt,r = NULL,totalSize,method = "optimal"){
     }else{
       outcoef2 = coef(out2)
       outcoef2[1]=outcoef2[1]-log(n1/n0)
-      dual2 = dual(outcoef2,x_obs,y_obs,qt)
+      dual2 = dual(outcoef2)
     }
     # the estimated coefficients
     if (dual1 > dual2){

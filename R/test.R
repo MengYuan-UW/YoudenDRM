@@ -34,18 +34,18 @@ KStest = function(x,y,qt,r = NULL,totalSize,method = "optimal"){
   if(is.null(r)){
     list(stat = Delta_stat,P0 = P0, P1 = P1, t = t)
   }else{
-    list(stat = Delta_stat,P0 = c(1-zeta0,P0), P1 = c(1-zeta1,P1), t = c(r,t))
+    list(stat = Delta_stat,P0 = c(1-zeta[1],P0), P1 = c(1-zeta[2],P1), t = c(r,t))
   }
 
 }
 
 #'
 #' @title Goodness-of-fit test
-#' @description Goodness-of-fit test for the validity of the DRM with a pre-specified basis function \code{qt}.
+#' @description Goodness-of-fit test for the validity of the density ratio model (DRM) with a pre-specified basis function \code{qt}.
 #' @param x observed sample from \eqn{F_0}.
 #' @param y observed sample from \eqn{F_1}.
 #' @param qt pre-sepecified basis functions of t in the exponential term. For example, \code{qt = c("t","log(t)")}.
-#' @param r  the value of the LLOD. The default case is where no LLOD exists.
+#' @param r  the value of the lower limit of detetion (LLOD). The default case is where no LLOD exists.
 #' @param totalSize the total sample sizes \eqn{(n_0,n_1)}. When there is no LLOD (\code{r = NULL}), this argument is optional. See \code{help(DRM)} `Details'.
 #' @param method the method used to fit the DRM. The options include \code{"glm"}, \code{"multinom"} and \code{"optimal"}.
 #' The default setting is \code{"optimal"}. See \code{help(DRM)} for details.

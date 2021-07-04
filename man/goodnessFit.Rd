@@ -13,7 +13,7 @@ goodnessFit(x, y, qt, r = NULL, totalSize, method = "optimal", B)
 
 \item{qt}{pre-sepecified basis functions of t in the exponential term. For example, \code{qt = c("t","log(t)")}.}
 
-\item{r}{the value of the LLOD. The default case is where no LLOD exists.}
+\item{r}{the value of the lower limit of detetion (LLOD). The default case is where no LLOD exists.}
 
 \item{totalSize}{the total sample sizes \eqn{(n_0,n_1)}. When there is no LLOD (\code{r = NULL}), this argument is optional. See \code{help(DRM)} `Details'.}
 
@@ -30,7 +30,7 @@ The function returns a list containing:
 }
 }
 \description{
-Goodness-of-fit test for the validity of the DRM with a pre-specified basis function \code{qt}.
+Goodness-of-fit test for the validity of the density ratio model (DRM) with a pre-specified basis function \code{qt}.
 }
 \details{
 \insertCite{qin1997goodness;textual}{YoudenDRM} defined a  Kolmogorov-Smirnov-type test statistic as
