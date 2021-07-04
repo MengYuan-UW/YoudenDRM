@@ -17,8 +17,7 @@ devtools::install_github("MengYuan-UW/YoudenDRM")
 ## Functions
 This package contains the following functions:
 - The Density Ratio Model (`DRM`): a function to fit the DRM.
-- The point estimation of the Youden index and cutoff point (`DRMest`): a function to estimate the Youden index and cutoff point as well as the asymptotic varinace of these estimators.
-- The confidence intervals for the Youden index and cutoff pount (`DRMci`): a function to construct the confidence intervals for the Youden index and cutoff point.
+- The inference on the Youden index and cutoff point (`Youden`): a function to estimate the Youden index and cutoff point as well as construct their confidence intervals.
 - The goodnees-of-fit test for the DRM (`goodnessFit`): a test to check the validity of the DRM with a pre-specified basis function.
 This package also contains a dataset used in [Yuan et al. (2021)](https://onlinelibrary.wiley.com/doi/abs/10.1002/cjs.11600): The Duchenne Muscular Dystrophy (`DMD`).
 
@@ -36,10 +35,8 @@ y = DMD$CK[DMD$Status == 1]
 # perform the goodness-of-fit test for the density ratio model with basis function `qt = t`
 set.seed(123456)
 goodnessFit(x,y,qt = "t",B = 1000)
-# obtain the estimate of the Youden index and optimal cutoff point as well as their standard deviations
-DRMest(x,y,qt = "t")
-# obtain the confidence intervals for the Youden index and optimal cutoff point
-DRMci(x,y,qt = "t")
+# obtain the estimate of the Youden index and optimal cutoff point as well as their confidence intervals
+Youden(x,y,qt = "t")
 ```
 - Example 2: data with a lower limit of detection
 ```r
@@ -54,10 +51,8 @@ r = qlnorm(0.15,meanlog = 2.5, sdlog = sqrt(0.09))
 # get the data with the lower limit of detection r
 x = x[x>=r]
 y = y[y>=r]
-# obtain the estimate of the Youden index and optimal cutoff point as well as their standard deviations
-DRMest(x,y,qt,r,totalSize = c(50,50))
-# obtain the confidence intervals for the Youden index and optimal cutoff point
-DRMci(x,y,qt,r,totalSize = c(50,50))
+# obtain the estimate of the Youden index and optimal cutoff point as well as their confidence intervals
+Youden(x,y,qt,r,totalSize = c(50,50))
 ```
 
 ## References
