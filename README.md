@@ -11,8 +11,11 @@ This package provides the estimators and confidence intervals for the Youden ind
 ## Installation
 Install this package from Github with 
 ```r
+# If the package "devtool" has not been installed, install it fisrt with 
 #install.packages("devtools")
+library(devtools)
 devtools::install_github("MengYuan-UW/YoudenDRM")
+library("YoudenDRM")
 ```
 ## Functions
 This package contains the following functions:
@@ -26,7 +29,6 @@ This package also contains a dataset used in [Yuan et al. (2021)](https://online
 We provide two examples.
 - Example 1: data without lower limit of detection
 ```r
-library("YoudenDRM")
 # get the DMD dataset
 data(DMD)
 # get the measurements of the biomarker CK in two groups. Note that the measurements are fully observed. 
