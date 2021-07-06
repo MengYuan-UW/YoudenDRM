@@ -58,4 +58,4 @@ Youden(x,y,qt,r,totalSize = c(50,50),CItype ="logit-DRM")
 ```
 
 ## References
-[Yuan M, Li P, Wu C (2021). “Semiparametric inference of the Youden index and the optimal cut-off point under density ratio models.” The Canadian Journal of Statistics. In press.](https://onlinelibrary.wiley.com/doi/abs/10.1002/cjs.11600)
+Yuan M, Li P, Wu C (2021). Semiparametric inference of the Youden index and the optimal cut-off point under density ratio models. _The Canadian Journal of Statistics._ [In press.](https://onlinelibrary.wiley.com/doi/abs/10.1002/cjs.11600)
