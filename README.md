@@ -11,16 +11,17 @@ This package provides the estimators and confidence intervals for the Youden ind
 ## Installation
 Install this package from Github with 
 ```r
+# If the package "devtool" has not been installed, install it fisrt with 
 #install.packages("devtools")
+library(devtools)
 devtools::install_github("MengYuan-UW/YoudenDRM")
+library("YoudenDRM")
 ```
 ## Functions
 This package contains the following functions:
 - The Density Ratio Model (`DRM`): a function to fit the DRM.
-- The point estimation of the Youden index and cutoff point (`DRMest`): a function to estimate the Youden index and cutoff point as well as the asymptotic varinace of these estimators.
-- The confidence intervals for the Youden index and cutoff pount (`DRMci`): a function to construct the confidence intervals for the Youden index and cutoff point.
+- The inference on the Youden index and cutoff point (`Youden`): a function to estimate the Youden index and cutoff point as well as construct their confidence intervals.
 - The goodnees-of-fit test for the DRM (`goodnessFit`): a test to check the validity of the DRM with a pre-specified basis function.
-This package also contains a dataset used in [Yuan et al. (2021)](https://onlinelibrary.wiley.com/doi/abs/10.1002/cjs.11600): The Duchenne Muscular Dystrophy (`DMD`).
 
 
 ## Usage
@@ -52,4 +53,5 @@ Youden(x,y,qt,r,totalSize = c(50,50),CItype ="logit-DRM")
 ```
 
 ## References
-Yuan M, Li P, Wu C (2021). “Semiparametric inference of the Youden index and the optimal cut-off point under density ratio models.” The Canadian Journal of Statistics, 49, 965 - 986.
+Yuan M, Li P, Wu C (2021). “Semiparametric inference of the Youden index and the optimal cut-off point under density ratio models.” The Canadian Journal of Statistics, 49, 965 - 986. [PDF](https://onlinelibrary.wiley.com/doi/abs/10.1002/cjs.11600)
+
