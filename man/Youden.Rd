@@ -62,23 +62,22 @@ The Wald-type confidence interval for the cutoff point is contructed based on th
 }
 }
 \examples{
-#Example 1 (without LLOD)
-#DMD is the dataset of data application in the paper.
-x = DMD$CK[DMD$Status == 0]
-y = DMD$CK[DMD$Status == 1]
-Youden(x,y,qt = "t",CItype ="logit-DRM")
-#Example 2 (with a LLOD)
+
 #Date generation
 set.seed(123456)
 x = rlnorm(50, meanlog = 2.5, sdlog = sqrt(0.09))
 y = rlnorm(50, meanlog = 2.87,sdlog = sqrt(0.25))
+#' # The basis function
+qt = c("log(t)","log(t)^2")
+#Example 1 (without LLOD)
+Youden(x,y,qt,CItype ="logit-DRM")
+
+#Example 2 (with a LLOD)
 #Create the LLOD
 r = qlnorm(0.15,meanlog = 2.5, sdlog = sqrt(0.09))
 #Observed samples
 x = x[x>=r]
 y = y[y>=r]
-# The basis function
-qt = c("log(t)","log(t)^2")
 Youden(x,y,qt,r,totalSize = c(50,50),CItype ="logit-DRM")
 }
 \references{

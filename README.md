@@ -28,37 +28,28 @@ We provide two examples.
 - Example 1: data without lower limit of detection
 ```r
 library("YoudenDRM")
-# get the DMD dataset
-data(DMD)
-# get the measurements of the biomarker CK in two groups. Note that the measurements are fully observed. 
-x = DMD$CK[DMD$Status == 0]
-y = DMD$CK[DMD$Status == 1]
-# perform the goodness-of-fit test for the density ratio model with basis function `qt = t`
-set.seed(123456)
-goodnessFit(x,y,qt = "t",B = 1000)
-# obtain the estimate of the Youden index and optimal cutoff point as well as their standard deviations
-DRMest(x,y,qt = "t")
-# obtain the confidence intervals for the Youden index and optimal cutoff point
-DRMci(x,y,qt = "t")
-```
-- Example 2: data with a lower limit of detection
-```r
 # generate the fully observed data
 set.seed(123456)
 x = rlnorm(50, meanlog = 2.5, sdlog = sqrt(0.09))
 y = rlnorm(50, meanlog = 2.87,sdlog = sqrt(0.25))
 # basis function
 qt = c("log(t)","log(t)^2")
+# perform the goodness-of-fit test for the density ratio model with basis function
+set.seed(123456)
+goodnessFit(x,y,qt,B = 1000)
+# obtain the estimate, asymptotic standard deviation (ASD), and the 95% confidence intervals (lower bound and uppper bound) of the Youden index and optimal cutoff point
+Youden(x,y,qt,CItype ="logit-DRM")
+```
+- Example 2: data with a lower limit of detection
+```r
 # create the LLOD
 r = qlnorm(0.15,meanlog = 2.5, sdlog = sqrt(0.09))
 # get the data with the lower limit of detection r
 x = x[x>=r]
 y = y[y>=r]
-# obtain the estimate of the Youden index and optimal cutoff point as well as their standard deviations
-DRMest(x,y,qt,r,totalSize = c(50,50))
-# obtain the confidence intervals for the Youden index and optimal cutoff point
-DRMci(x,y,qt,r,totalSize = c(50,50))
+# obtain the estimate, asymptotic standard deviation (ASD), and the 95% confidence intervals (lower bound and uppper bound) of the Youden index and optimal cutoff point
+Youden(x,y,qt,r,totalSize = c(50,50),CItype ="logit-DRM")
 ```
 
 ## References
-Yuan M, Li P, Wu C (2021). “Semiparametric inference of the Youden index and the optimal cut-off point under density ratio models.” The Canadian Journal of Statistics. In press.
+Yuan M, Li P, Wu C (2021). “Semiparametric inference of the Youden index and the optimal cut-off point under density ratio models.” The Canadian Journal of Statistics, 49, 965 - 986.

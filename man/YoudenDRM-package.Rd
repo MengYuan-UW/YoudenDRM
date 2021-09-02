@@ -26,7 +26,6 @@ where \eqn{dF_i} denote the density of \eqn{F_i}; \eqn{\alpha} and \eqn{\boldsym
 
 This package contains the following material:
 \itemize{
-\item The Duchenne Muscular Dystrophy (\code{\link{DMD}}): the dataset in \insertCite{yuan2021semiparametric;textual}{YoudenDRM}.
 \item The Density Ratio Model (\code{\link{DRM}}): a function to fit the DRM.
 \item The inference on the Youden index and cutoff point (\code{\link{Youden}}): a function to estimate the Youden index and cutoff point as well as construct their confidence intervals.
 \item The goodnees-of-fit test for the DRM (\code{\link{goodnessFit}}): a test to check the validity of the DRM with a pre-specified basis function.

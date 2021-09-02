@@ -72,12 +72,6 @@ KStest = function(x,y,qt,r = NULL,totalSize,method = "optimal"){
 #' \item KSstat: the test statistic,
 #' \item pval: p value of the test.
 #' }
-#' @examples
-#' #DMD is the dataset of data application in paper
-#' x = DMD$CK[DMD$Status == 0]
-#' y = DMD$CK[DMD$Status == 1]
-#' set.seed(123456)
-#' goodnessFit(x,y,qt = "t",B = 1000)
 #'
 #' @references
 #'

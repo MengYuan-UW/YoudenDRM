@@ -43,14 +43,6 @@ We reject the null hypothesis that the DRM is satisfied if \eqn{\Delta_n} is gre
 The limiting distribution of \eqn{\Delta_n} has a complicated form.
 \insertCite{qin1997goodness;textual}{YoudenDRM} suggested to use a Bootstrap method to find the critical value.
 }
-\examples{
-#DMD is the dataset of data application in paper
-x = DMD$CK[DMD$Status == 0]
-y = DMD$CK[DMD$Status == 1]
-set.seed(123456)
-goodnessFit(x,y,qt = "t",B = 1000)
-
-}
 \references{
 \insertRef{qin1997goodness}{YoudenDRM}
 
